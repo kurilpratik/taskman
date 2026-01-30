@@ -1,21 +1,23 @@
-import express from "express";
-import cors from "cors";
-import dotenv from "dotenv";
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import { connectDB } from './config/db';
 
 dotenv.config();
+connectDB();
 
 const app = express();
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
-  }),
+    origin: 'http://localhost:3000',
+  })
 );
 
 app.use(express.json());
 
-app.get("/health", (_, res) => {
-  res.json({ status: "OK" });
+app.get('/health', (_, res) => {
+  res.json({ status: 'OK' });
 });
 
 export default app;
