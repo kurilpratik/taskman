@@ -3,9 +3,10 @@
     "target": "ES2020",
     "module": "CommonJS",
     "outDir": "server/dist",
-    // "rootDir": "taskman",
+    // "rootDir": "/",
     "strict": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "skipLibCheck": true
   },
   "exclude": ["node_modules", "client"]
 }
