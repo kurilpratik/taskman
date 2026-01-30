@@ -6,5 +6,6 @@
     // "rootDir": "taskman",
     "strict": true,
     "esModuleInterop": true
-  }
+  },
+  "exclude": ["node_modules", "client"]
 }
