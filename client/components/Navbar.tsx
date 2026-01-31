@@ -9,14 +9,14 @@ type NavbarProps = {
 };
 
 const Navbar: React.FC<NavbarProps> = ({
-  isLoggedIn = false,
+  isLoggedIn = true,
   userName = 'Pratik',
 }) => {
   return (
     <header className="sticky top-1 z-100 mx-auto w-xl px-0 py-4">
       <nav>
         {/* Glassy rounded container */}
-        <div className="flex items-center justify-between gap-6 rounded-full border border-white/10 bg-white/6 px-5 py-2 shadow-md backdrop-blur-md">
+        <div className="flex items-center justify-between gap-6 rounded-full border border-white/10 bg-white px-5 py-2 shadow-md backdrop-blur-md">
           {/* Left: Logo */}
           <div className="flex items-center gap-3">
             <Link href="/" className="text-neutral font-semibold">
