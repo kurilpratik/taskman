@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -177,6 +178,12 @@ const Register = () => {
           </Button>
         </div>
       </form>
+      <p className="mt-4 text-center text-sm">
+        Already have an account?{' '}
+        <Link href="/login" className="text-blue-500 hover:underline">
+          Log in
+        </Link>
+      </p>
     </div>
   );
 };
