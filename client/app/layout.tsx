@@ -31,7 +31,6 @@ export default function RootLayout({
       >
         <DashboardBackground>
           <Navbar />
-
           {children}
         </DashboardBackground>
       </body>

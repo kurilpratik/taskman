@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Card } from './ui/card';
 import { Checkbox } from './ui/checkbox';
 import { Button } from './ui/button';
@@ -9,15 +9,61 @@ import { Confetti, ConfettiButton } from './ui/confetti';
 
 const Task = () => {
   const [checked, setChecked] = useState(false);
+  const [title, setTitle] = useState('Task Title');
+  const [isEditing, setIsEditing] = useState(false);
+  const [draftTitle, setDraftTitle] = useState(title);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  useEffect(() => {
+    if (isEditing) {
+      setDraftTitle(title);
+    }
+  }, [isEditing]);
+
+  useEffect(() => {
+    if (isEditing && inputRef.current) {
+      inputRef.current.focus();
+      inputRef.current.select();
+    }
+  }, [isEditing]);
+
+  const startEditing = () => setIsEditing(true);
+  const cancelEditing = () => {
+    setIsEditing(false);
+    setDraftTitle(title);
+  };
+  const saveTitle = () => {
+    const trimmed = draftTitle.trim();
+    if (trimmed.length > 0) setTitle(trimmed);
+    setIsEditing(false);
+  };
+
+  const onKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (e) => {
+    if (e.key === 'Enter') {
+      saveTitle();
+    } else if (e.key === 'Escape') {
+      cancelEditing();
+    }
+  };
+
   return (
     <div className="mx-auto w-xl">
-      <Card className="my-4 flex-row items-center justify-between gap-0 p-2 shadow-[0_8px_24px_rgba(149,157,165,0.2)]">
+      <Card className="my-4 flex-row items-center justify-between gap-0 border-0 p-4 shadow-[0_8px_24px_rgba(149,157,165,0.2)]">
         <div className="flex-1">
-          <h2
-            className={`block font-semibold ${checked ? 'text-neutral-400 line-through' : ''}`}
-          >
-            Task Title
-          </h2>
+          {isEditing ? (
+            <input
+              ref={inputRef}
+              value={draftTitle}
+              onChange={(e) => setDraftTitle(e.target.value)}
+              onKeyDown={onKeyDown}
+              className="w-[95%]"
+            />
+          ) : (
+            <h2
+              className={`block font-semibold ${checked ? 'text-neutral-400 line-through' : ''}`}
+            >
+              {title}
+            </h2>
+          )}
           <p
             className={`block text-xs ${checked ? 'text-neutral-300' : 'text-neutral-600'}`}
           >
@@ -32,9 +78,30 @@ const Task = () => {
               className="h-6 w-6"
             />
           </ConfettiButton>
-          <Button variant={'secondary'} size={'icon-xs'} className="ml-2">
-            <Edit2Icon className="text-neutral-400" />
-          </Button>
+          {isEditing ? (
+            <div className="ml-2 flex items-center gap-2">
+              <Button size={'xs'} onClick={saveTitle} className="px-3">
+                Save
+              </Button>
+              <Button
+                variant={'destructive'}
+                size={'xs'}
+                onClick={cancelEditing}
+                className="px-2"
+              >
+                Cancel
+              </Button>
+            </div>
+          ) : (
+            <Button
+              variant={'secondary'}
+              size={'icon-xs'}
+              className="ml-2"
+              onClick={startEditing}
+            >
+              <Edit2Icon className="text-neutral-400" />
+            </Button>
+          )}
         </div>
       </Card>
     </div>
