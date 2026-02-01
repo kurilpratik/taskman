@@ -3,7 +3,6 @@ import Link from 'next/link';
 
 import { Button } from './ui/button';
 import { LogOut } from 'lucide-react';
-import Pomodoro from './Pomodoro';
 
 type NavbarProps = {
   isLoggedIn?: boolean;
