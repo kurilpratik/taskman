@@ -2,6 +2,8 @@ import React from 'react';
 import Link from 'next/link';
 
 import { Button } from './ui/button';
+import { LogOut } from 'lucide-react';
+import Pomodoro from './Pomodoro';
 
 type NavbarProps = {
   isLoggedIn?: boolean;
@@ -10,10 +12,10 @@ type NavbarProps = {
 
 const Navbar: React.FC<NavbarProps> = ({
   isLoggedIn = true,
-  userName = 'Pratik',
+  userName = 'Hey Pratik',
 }) => {
   return (
-    <header className="sticky top-1 z-100 mx-auto w-xl px-0 py-4">
+    <header className="top-1 z-100 mx-auto w-xl px-0 py-4">
       <nav>
         {/* Glassy rounded container */}
         <div className="flex items-center justify-between gap-6 rounded-full border border-white/10 bg-white px-5 py-2 shadow-md backdrop-blur-md">
@@ -61,8 +63,16 @@ const Navbar: React.FC<NavbarProps> = ({
 
             {/* show username when logged in */}
             {isLoggedIn && (
-              <div className="text-neutral/95 rounded-md bg-white/5 px-3 py-1 text-sm font-medium">
-                {userName}
+              <div className="flex items-center gap-3">
+                <p className="py-1 text-sm">{userName}</p>
+                <Button
+                  asChild={false}
+                  variant={'secondary'}
+                  size="sm"
+                  className="rounded-full"
+                >
+                  <LogOut />
+                </Button>
               </div>
             )}
           </div>

@@ -20,7 +20,7 @@ const CreateTask = () => {
   };
 
   return (
-    <div className="sticky top-20 z-10 mx-auto my-3 mb-5 w-xl">
+    <div className="sticky top-4 z-10 mx-auto my-3 mb-5 w-xl">
       <form className="flex gap-2" onSubmit={handleSubmit}>
         <Input
           id="task"
