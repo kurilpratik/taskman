@@ -4,8 +4,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Card } from './ui/card';
 import { Checkbox } from './ui/checkbox';
 import { Button } from './ui/button';
-import { Edit, Edit2, Edit2Icon, Edit3 } from 'lucide-react';
-import { Confetti, ConfettiButton } from './ui/confetti';
+import { Delete, DeleteIcon, Edit2Icon, Trash2 } from 'lucide-react';
+import { ConfettiButton } from './ui/confetti';
 
 const Task = () => {
   const [checked, setChecked] = useState(false);
@@ -75,7 +75,7 @@ const Task = () => {
             <Checkbox
               checked={checked}
               onCheckedChange={(checked) => setChecked(checked === true)}
-              className="h-6 w-6"
+              className="h-6 w-6 border-blue-200"
             />
           </ConfettiButton>
           {isEditing ? (
@@ -93,14 +93,19 @@ const Task = () => {
               </Button>
             </div>
           ) : (
-            <Button
-              variant={'secondary'}
-              size={'icon-xs'}
-              className="ml-2"
-              onClick={startEditing}
-            >
-              <Edit2Icon className="text-neutral-400" />
-            </Button>
+            <div>
+              <Button
+                variant={'secondary'}
+                size={'icon-xs'}
+                className="ml-2"
+                onClick={startEditing}
+              >
+                <Edit2Icon className="text-blue-800" />
+              </Button>
+              <Button variant={'secondary'} size={'icon-xs'} className="ml-2">
+                <Trash2 className="text-red-800" />
+              </Button>
+            </div>
           )}
         </div>
       </Card>

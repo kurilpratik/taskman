@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
+import { PlusCircle, PlusIcon } from 'lucide-react';
 
 const CreateTask = () => {
   const [title, setTitle] = useState('');
@@ -19,7 +20,7 @@ const CreateTask = () => {
   };
 
   return (
-    <div className="mx-auto my-6 w-xl">
+    <div className="sticky top-20 z-10 mx-auto my-3 mb-5 w-xl">
       <form className="flex gap-2" onSubmit={handleSubmit}>
         <Input
           id="task"
@@ -29,9 +30,12 @@ const CreateTask = () => {
           onChange={handleChange}
           placeholder="Write your task here..."
           required
-          className="bg-white"
+          className="rounded-full border-blue-300 bg-white"
         />
-        <Button type="submit">Create Task</Button>
+        <Button type="submit" className="gap-0.5 rounded-full">
+          <PlusIcon />
+          Create Task
+        </Button>
       </form>
     </div>
   );
