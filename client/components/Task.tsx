@@ -6,6 +6,7 @@ import { Checkbox } from './ui/checkbox';
 import { Button } from './ui/button';
 import { Delete, DeleteIcon, Edit2Icon, Trash2 } from 'lucide-react';
 import { ConfettiButton } from './ui/confetti';
+import { toast } from 'sonner';
 
 const Task = () => {
   const [checked, setChecked] = useState(false);
@@ -34,6 +35,7 @@ const Task = () => {
   const saveTitle = () => {
     const trimmed = draftTitle.trim();
     if (trimmed.length > 0) setTitle(trimmed);
+    toast.success('Task updated successfully!');
     setIsEditing(false);
   };
 
@@ -102,7 +104,14 @@ const Task = () => {
               >
                 <Edit2Icon className="text-blue-800" />
               </Button>
-              <Button variant={'secondary'} size={'icon-xs'} className="ml-2">
+              <Button
+                variant={'secondary'}
+                size={'icon-xs'}
+                className="ml-2"
+                onClick={() => {
+                  toast.error('Task deleted');
+                }}
+              >
                 <Trash2 className="text-red-800" />
               </Button>
             </div>

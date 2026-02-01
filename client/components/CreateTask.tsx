@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
 import { PlusCircle, PlusIcon } from 'lucide-react';
+import { toast } from 'sonner';
 
 const CreateTask = () => {
   const [title, setTitle] = useState('');
@@ -15,6 +16,7 @@ const CreateTask = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log('Creating task:', title);
+    toast.success('Task created successfully!');
     // Reset the input field after submission
     setTitle('');
   };
