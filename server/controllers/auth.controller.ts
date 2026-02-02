@@ -1,13 +1,20 @@
 import { Request, Response } from 'express';
 import * as service from '../services/auth.service';
 
-// Use secure cookies only in production. In development (localhost over http)
-// `secure: true` prevents the browser from setting the cookie, which makes
-// middleware/client checks fail. Keep httpOnly and sameSite for security.
+// Cookie options:
+// - httpOnly: always true (so JS cannot read the cookie)
+// - secure: only when in production (https)
+// - sameSite: when in production we need 'none' so cross-site requests can
+//   send the cookie (browser requires Secure with SameSite=None). For local
+//   development (http://localhost) set 'lax' so the cookie will be accepted
+//   by the browser while still providing reasonable CSRF protection.
 const cookieOptions = {
   httpOnly: true,
   secure: process.env.NODE_ENV === 'production',
-  sameSite: 'none' as const,
+  sameSite:
+    process.env.NODE_ENV === 'production'
+      ? ('none' as const)
+      : ('lax' as const),
 };
 
 export const register = async (req: Request, res: Response) => {
