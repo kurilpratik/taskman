@@ -8,9 +8,21 @@ import { Delete, DeleteIcon, Edit2Icon, Trash2 } from 'lucide-react';
 import { ConfettiButton } from './ui/confetti';
 import { toast } from 'sonner';
 
-const Task = () => {
-  const [checked, setChecked] = useState(false);
-  const [title, setTitle] = useState('Task Title');
+type TaskProps = {
+  id: string | number;
+  title: string;
+  completed: boolean;
+  createdAt: string;
+};
+
+const Task: React.FC<TaskProps> = ({
+  id,
+  title: initialTitle,
+  completed,
+  createdAt,
+}) => {
+  const [checked, setChecked] = useState<boolean>(completed ?? false);
+  const [title, setTitle] = useState<string>(initialTitle ?? 'Task Title');
   const [isEditing, setIsEditing] = useState(false);
   const [draftTitle, setDraftTitle] = useState(title);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -48,7 +60,7 @@ const Task = () => {
   };
 
   return (
-    <div className="mx-auto w-xl">
+    <div className="mx-auto w-xl" key={id}>
       <Card className="my-4 flex-row items-center justify-between gap-0 border-0 p-4 shadow-[0_8px_24px_rgba(149,157,165,0.2)]">
         <div className="flex-1">
           {isEditing ? (
@@ -69,7 +81,7 @@ const Task = () => {
           <p
             className={`block text-xs ${checked ? 'text-neutral-300' : 'text-neutral-600'}`}
           >
-            Created At: 2023-03-15
+            {createdAt}
           </p>
         </div>
         <div className="flex items-center">

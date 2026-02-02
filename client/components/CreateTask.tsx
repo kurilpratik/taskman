@@ -3,22 +3,25 @@
 import React, { useState } from 'react';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
-import { PlusCircle, PlusIcon } from 'lucide-react';
+import { PlusIcon } from 'lucide-react';
 import { toast } from 'sonner';
 
-const CreateTask = () => {
+import { createTask } from '@/lib/tasks';
+
+const CreateTask = ({ onCreate }: { onCreate: () => void }) => {
   const [title, setTitle] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log('Creating task:', title);
-    toast.success('Task created successfully!');
-    // Reset the input field after submission
+    await createTask({ title });
     setTitle('');
+    toast.success('Task created successfully!');
+    onCreate(); // refetch tasks
   };
 
   return (

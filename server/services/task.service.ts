@@ -40,7 +40,7 @@ export const getTasks = async ({
   ]);
 
   return {
-    date: tasks,
+    data: tasks,
     meta: {
       page,
       limit,
