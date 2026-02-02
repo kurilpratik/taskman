@@ -1,9 +1,12 @@
 import { Request, Response } from 'express';
 import * as service from '../services/auth.service';
 
+// Use secure cookies only in production. In development (localhost over http)
+// `secure: true` prevents the browser from setting the cookie, which makes
+// middleware/client checks fail. Keep httpOnly and sameSite for security.
 const cookieOptions = {
   httpOnly: true,
-  secure: true,
+  secure: process.env.NODE_ENV === 'production',
   sameSite: 'none' as const,
 };
 
