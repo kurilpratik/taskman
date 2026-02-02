@@ -5,6 +5,8 @@ import cookieParser from 'cookie-parser';
 
 import { connectDB } from './config/db';
 import authRoutes from './routes/auth.routes';
+import router from './routes/auth.routes';
+import { authMiddleware } from './middleware/auth.middleware';
 
 dotenv.config();
 connectDB();
@@ -20,6 +22,8 @@ app.use((req, res, next) => {
   console.log(`${req.method} ${req.url}`);
   next();
 });
+
+router.use(authMiddleware);
 
 app.get('/api/health', (_, res) => {
   res.json({ status: 'OK' });
