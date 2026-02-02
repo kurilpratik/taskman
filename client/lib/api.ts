@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { getAccessTokenStore, setAccessTokenStore } from './token';
-import { response } from 'express';
 
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
