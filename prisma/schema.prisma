@@ -14,17 +14,24 @@ datasource db {
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
-  posts Post[]
+  id String @id @default(uuid())
+  email String @unique
+  fullName String
+  password String
+  tokens RefreshToken[]
+  createdAt DateTime @default(now())
 }
 
-model Post {
-  id        Int     @id @default(autoincrement())
-  title     String
-  content   String?
-  published Boolean @default(false)
-  author    User    @relation(fields: [authorId], references: [id])
-  authorId  Int
+model RefreshToken {
+  id String @id @default(uuid())
+  token String
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  revoked Boolean @default(false)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
 }
+
+// After changing here, always:
+// npx prisma generate
+// npx prisma migrate dev -n 'name'
