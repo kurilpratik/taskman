@@ -6,6 +6,7 @@ import {
   signAccessToken,
   signRefreshToken,
   verifyRefreshToken,
+  verifyAccessToken,
 } from '../utils/jwt';
 
 export const register = async (
@@ -51,6 +52,20 @@ export const refresh = async (token: string) => {
   if (!storedToken) throw new Error('Invalid refresh token');
 
   return { accessToken: signAccessToken(payload.userId) };
+};
+
+// Get currently authenticated user using access token
+export const getMe = async (accessToken: string) => {
+  const payload = verifyAccessToken(accessToken);
+
+  const user = await prisma.user.findUnique({
+    where: { id: payload.userId },
+    select: { id: true, email: true, fullName: true, createdAt: true },
+  });
+
+  if (!user) throw new Error('User not found');
+
+  return user;
 };
 
 // Logging out revokes the refreshToken now it will be generated when the user logins again.

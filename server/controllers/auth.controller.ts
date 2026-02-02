@@ -46,6 +46,20 @@ export const refresh = async (req: Request, res: Response) => {
   }
 };
 
+export const getMe = async (req: Request, res: Response) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) return res.status(401).json({ message: 'Unauthorized' });
+
+    const token = authHeader.split(' ')[1];
+    const user = await service.getMe(token);
+
+    return res.status(200).json({ user });
+  } catch (err: any) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+};
+
 export const logout = async (req: Request, res: Response) => {
   const token = req.cookies.refreshToken;
   if (token) await service.logout(token);

@@ -37,9 +37,9 @@ api.interceptors.response.use(
         const res = await api.post('/auth/refresh');
 
         const newAccessToken = res.data.accessToken;
-        -setAccessTokenStore(newAccessToken);
+        setAccessTokenStore(newAccessToken);
 
-        originalRequest.headers.Authorization = `bearer ${newAccessToken}`;
+        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
 
         return api(originalRequest);
       } catch {

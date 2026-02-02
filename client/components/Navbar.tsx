@@ -13,13 +13,13 @@ type NavbarProps = {
   userName?: string;
 };
 
-const Navbar: React.FC<NavbarProps> = ({
-  isLoggedIn = true,
-  userName = 'Hey Pratik',
-}) => {
+const Navbar: React.FC<NavbarProps> = ({}) => {
   const auth = useAuth();
   const logout = auth?.logout;
   const router = useRouter();
+  // prefer context values, fall back to props for backward compatibility
+  const isAuthenticated = auth?.isAuthenticated;
+  const userFirstName = auth?.user?.fullName?.split(' ')[0] ?? 'User';
 
   const handleLogout = async () => {
     if (logout) {
@@ -58,7 +58,7 @@ const Navbar: React.FC<NavbarProps> = ({
           {/* Right: auth actions */}
           <div className="flex items-center gap-3">
             {/* show Register when not logged in */}
-            {!isLoggedIn && (
+            {!isAuthenticated && (
               <div className="flex items-center gap-3">
                 <Link
                   href="/register"
@@ -75,9 +75,9 @@ const Navbar: React.FC<NavbarProps> = ({
             )}
 
             {/* show username when logged in */}
-            {isLoggedIn && (
+            {isAuthenticated && (
               <div className="flex items-center gap-3">
-                <p className="py-1 text-sm">{userName}</p>
+                <p className="py-1 text-sm">Hey {userFirstName}</p>
                 <Button
                   asChild={false}
                   variant={'secondary'}
