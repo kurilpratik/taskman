@@ -5,8 +5,7 @@ import cookieParser from 'cookie-parser';
 
 import { connectDB } from './config/db';
 import authRoutes from './routes/auth.routes';
-import router from './routes/auth.routes';
-import { authMiddleware } from './middleware/auth.middleware';
+import taskRoutes from './routes/task.routes';
 
 dotenv.config();
 connectDB();
@@ -28,12 +27,11 @@ app.use((req, res, next) => {
   next();
 });
 
-router.use(authMiddleware);
-
 app.get('/api/health', (_, res) => {
   res.json({ status: 'OK' });
 });
 
 app.use('/api/auth', authRoutes);
+app.use('/api/tasks', taskRoutes);
 
 export default app;

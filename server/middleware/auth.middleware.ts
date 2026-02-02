@@ -1,6 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
 import { verifyAccessToken } from '../utils/jwt';
 
+/**
+ * Custom request type that includes userId
+ */
+export interface AuthRequest extends Request {
+  userId?: string;
+}
+
 export const authMiddleware = (
   req: Request & { userId?: string },
   res: Response,

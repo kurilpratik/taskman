@@ -19,6 +19,7 @@ model User {
   fullName String
   password String
   tokens RefreshToken[]
+  tasks Task[]
   createdAt DateTime @default(now())
 }
 
@@ -31,6 +32,17 @@ model RefreshToken {
   expiresAt DateTime
   createdAt DateTime @default(now())
 }
+
+model Task {
+  id          String   @id @default(uuid())
+  title       String
+  completed   Boolean  @default(false)
+  userId      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
 
 // After changing here, always:
 // npx prisma generate
