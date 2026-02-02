@@ -49,12 +49,15 @@ const Login = () => {
     try {
       if (login) {
         await login(data.email, data.password);
+        setData({ email: '', password: '' });
+        setLoading(false);
+        router.push('/dashboard');
+        console.log('Login successful');
       } else {
         setErrors({ email: 'Login function is not available' });
         setLoading(false);
         return;
       }
-      router.push('/dashboard');
     } catch (error) {
       setLoading(false);
       setErrors({ email: 'Invalid email or password' });
