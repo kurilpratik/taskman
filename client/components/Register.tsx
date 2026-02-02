@@ -9,6 +9,8 @@ import { Label } from '@/components/ui/label';
 import { Field, FieldContent, FieldLabel } from '@/components/ui/field';
 import { Button } from '@/components/ui/button';
 
+import { useAuth } from '@/context/AuthContext';
+
 type FormData = {
   fullName: string;
   email: string;
@@ -20,6 +22,9 @@ type FormErrors = Partial<Record<keyof FormData, string>>;
 
 const Register = () => {
   const router = useRouter();
+  const auth = useAuth();
+  const register = auth?.register;
+
   const [data, setData] = useState<FormData>({
     fullName: '',
     email: '',
@@ -50,7 +55,7 @@ const Register = () => {
     return newErrors;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const validationErrors = validate();
@@ -62,25 +67,20 @@ const Register = () => {
     setErrors({});
     setLoading(true);
 
-    const payload = {
-      fullName: data.fullName,
-      email: data.email,
-      password: data.password,
-    };
-
-    // Simulate form submission
-    setTimeout(() => {
-      setLoading(false);
-      // Reset form or show success message
-      console.log('Form submitted:', payload);
+    try {
+      if (register) {
+        await register(data.email, data.password, data.fullName);
+      }
+      router.push('/dashboard');
       setData({
         fullName: '',
         email: '',
         password: '',
         confirmPassword: '',
       });
-      router.push('/dashboard');
-    }, 2000);
+    } catch (error) {
+      alert('Registration failed');
+    }
   };
 
   return (

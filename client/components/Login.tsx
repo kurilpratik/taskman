@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useAuth } from '@/context/AuthContext';
 
 type FormData = {
   email: string;
@@ -17,6 +18,8 @@ type FormData = {
 type FormErrors = Partial<Record<keyof FormData, string>>;
 
 const Login = () => {
+  const auth = useAuth();
+  const login = auth?.login;
   const router = useRouter();
 
   const [data, setData] = useState<FormData>({
@@ -32,7 +35,7 @@ const Login = () => {
     setData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // const validationErrors = validate();
     // if (Object.keys(validationErrors).length > 0) {
@@ -43,22 +46,19 @@ const Login = () => {
     setErrors({});
     setLoading(true);
 
-    const payload = {
-      email: data.email,
-      password: data.password,
-    };
-
-    // Simulate form submission
-    setTimeout(() => {
-      setLoading(false);
-      // Reset form or show success message
-      console.log('Form submitted:', payload);
-      setData({
-        email: '',
-        password: '',
-      });
+    try {
+      if (login) {
+        await login(data.email, data.password);
+      } else {
+        setErrors({ email: 'Login function is not available' });
+        setLoading(false);
+        return;
+      }
       router.push('/dashboard');
-    }, 2000);
+    } catch (error) {
+      setLoading(false);
+      setErrors({ email: 'Invalid email or password' });
+    }
   };
 
   return (

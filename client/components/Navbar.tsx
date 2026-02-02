@@ -1,8 +1,12 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
 
 import { Button } from './ui/button';
 import { LogOut } from 'lucide-react';
+import { useAuth } from '@/context/AuthContext';
+import { useRouter } from 'next/navigation';
 
 type NavbarProps = {
   isLoggedIn?: boolean;
@@ -13,6 +17,16 @@ const Navbar: React.FC<NavbarProps> = ({
   isLoggedIn = true,
   userName = 'Hey Pratik',
 }) => {
+  const auth = useAuth();
+  const logout = auth?.logout;
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    if (logout) {
+      await logout();
+      router.push('/login');
+    }
+  };
   return (
     <header className="top-1 z-100 mx-auto w-xl px-0 py-4">
       <nav>
@@ -69,6 +83,7 @@ const Navbar: React.FC<NavbarProps> = ({
                   variant={'secondary'}
                   size="sm"
                   className="rounded-full"
+                  onClick={handleLogout}
                 >
                   <LogOut />
                 </Button>
