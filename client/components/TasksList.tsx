@@ -18,8 +18,12 @@ import {
 
 const TasksList = ({
   refreshKey,
+  status,
+  onRefresh,
 }: {
   refreshKey: number;
+  status?: 'completed' | 'pending';
+  onRefresh: () => void;
 }) => {
   const [tasks, setTasks] = useState<TaskType[]>([]);
   const [loading, setLoading] = useState(true);
@@ -28,7 +32,7 @@ const TasksList = ({
     const loadTasks = async () => {
       try {
         setLoading(true);
-        const res = await fetchTasks({ page: 1, limit: 10 });
+        const res = await fetchTasks({ page: 1, limit: 10, status });
         const body: any = res;
         const items: TaskType[] = body.data;
         setTasks(items);
@@ -40,16 +44,20 @@ const TasksList = ({
       }
     };
     loadTasks();
-  }, [refreshKey]);
+  }, [refreshKey, status]);
 
   const handleToggle = async (id: string) => {
     await toggleTask(id);
     console.log('Task toggled', id);
-    setTasks(prev =>
-      prev.map(t =>
-        t.id === id ? { ...t, completed: !t.completed } : t
-      )
-    );
+    // setTasks(prev =>
+    //   prev.map(t =>
+    //     t.id === id ? { ...t, completed: !t.completed } : t
+    //   )
+    // );
+    // Trigger refresh to reload all task lists
+    if (onRefresh) {
+      onRefresh();
+    }
   };
 
 const handleDelete = async (id: string) => {
