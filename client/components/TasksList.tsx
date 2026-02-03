@@ -29,14 +29,20 @@ const TasksList = ({
   const [tasks, setTasks] = useState<TaskType[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // NEW: pagination state
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const limit = 6;
+
   useEffect(() => {
     const loadTasks = async () => {
       try {
         setLoading(true);
-        const res = await fetchTasks({ page: 1, limit: 10, status, search }); // <-- include search
+        const res = await fetchTasks({ page, limit, status, search }); // <-- use page & limit
         const body: any = res;
         const items: TaskType[] = body.data;
         setTasks(items);
+        setTotal(body.meta?.total ?? 0); // <-- store total items
         setLoading(false);
       } catch (error) {
         console.log('Error in fetching tasks');
@@ -45,7 +51,12 @@ const TasksList = ({
       }
     };
     loadTasks();
-  }, [refreshKey, status, search]);   // <-- include search
+  }, [refreshKey, status, search, page]);   // <-- include page
+
+  // Optional: reset to first page when filters/search change
+  useEffect(() => {
+    setPage(1);
+  }, [status, search]);
 
   const handleToggle = async (id: string) => {
     await toggleTask(id);
@@ -65,6 +76,8 @@ const TasksList = ({
       onRefresh();
     }
   };
+
+  const totalPages = Math.max(1, Math.ceil(total / limit));
 
   if (loading)
     return (
@@ -91,30 +104,47 @@ const TasksList = ({
           onUpdate={handleUpdate}
         />
       ))}
-      <Pagination className="pb-4">
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious href="#" />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#">1</PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#" isActive>
-              2
-            </PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#">3</PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationEllipsis />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationNext href="#" />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
+
+      {totalPages > 1 && (
+        <Pagination className="pb-4">
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setPage((prev) => Math.max(1, prev - 1));
+                }}
+              />
+            </PaginationItem>
+
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+              <PaginationItem key={p}>
+                <PaginationLink
+                  href="#"
+                  isActive={p === page}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setPage(p);
+                  }}
+                >
+                  {p}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
+
+            <PaginationItem>
+              <PaginationNext
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setPage((prev) => Math.min(totalPages, prev + 1));
+                }}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      )}
     </div>
   );
 };
