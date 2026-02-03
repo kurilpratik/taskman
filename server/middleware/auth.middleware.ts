@@ -18,11 +18,14 @@ export const authMiddleware = (
 
   const token = header.split(' ')[1];
 
+  // Check if token exists after splitting
+  if (!token) return res.status(401).json({ message: 'Unauthorized' });
+
   try {
     const payload = verifyAccessToken(token);
     req.userId = payload.userId;
     next();
   } catch (err: any) {
-    res.status(400).json({ message: err.message });
+    res.status(401).json({ message: err.message });
   }
 };
