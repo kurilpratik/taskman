@@ -51,7 +51,7 @@ export const getTasks = async ({
 
 export const getTaskById = async (id: string, userId: string) => {
   const task = await prisma.task.findFirst({
-    where: { id: userId },
+    where: { id, userId },
   });
 
   if (!task) throw new Error('Task not found');
@@ -69,13 +69,21 @@ export const createTask = async (userId: string, title: string) => {
 };
 
 export const updateTask = async (userId: string, id: string, title: string) => {
-  const updated = await prisma.task.updateMany({
+  const task = await prisma.task.update({
     where: { id, userId },
     data: {
       title,
     },
   });
-  if (!updated) throw new Error('Task not found');
+
+  if (!task) throw new Error("Task not found");
+
+  return prisma.task.update({
+    where: { id },
+    data: { title },
+  });
+
+  console.log(task);
 };
 
 export const deleteTask = async (id: string, userId: string) => {

@@ -65,6 +65,13 @@ const handleDelete = async (id: string) => {
   setTasks(prev => prev.filter(t => t.id !== id));
 };
 
+const handleUpdate = async () => {
+    // Trigger refresh to reload all task lists
+    if (onRefresh) {
+      onRefresh();
+    }
+  };
+
   if (loading) return <p className="text-center text-sm text-gray-500 pt-24">Loading tasks...</p>;
 
   if (!loading && tasks.length === 0) {
@@ -81,6 +88,7 @@ const handleDelete = async (id: string) => {
           createdAt={task.createdAt}
           onToggle={() => handleToggle(task.id)}
           onDelete={() => handleDelete(task.id)}
+          onUpdate={handleUpdate}
         />
       ))}
       <Pagination className="pb-4">

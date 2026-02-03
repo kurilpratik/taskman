@@ -8,6 +8,7 @@ import { Edit2Icon, Trash2 } from 'lucide-react';
 import { ConfettiButton } from './ui/confetti';
 import { toast } from 'sonner';
 import { formatDate } from '@/lib/helper';
+import { updateTask } from '@/lib/tasks';
 
 
 type TaskProps = {
@@ -17,6 +18,7 @@ type TaskProps = {
   createdAt: string;
   onToggle: () => void;
   onDelete: () => void;
+  onUpdate?: () => void;
 };
 
 const Task: React.FC<TaskProps> = ({
@@ -26,10 +28,12 @@ const Task: React.FC<TaskProps> = ({
   createdAt,
   onToggle,
   onDelete,
+  onUpdate,
 }) => {
   const [title, setTitle] = useState<string>(initialTitle ?? 'Task Title');
   const [isEditing, setIsEditing] = useState(false);
   const [draftTitle, setDraftTitle] = useState(title);
+  const [isUpdating, setIsUpdating] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
 
@@ -46,16 +50,49 @@ const Task: React.FC<TaskProps> = ({
     }
   }, [isEditing]);
 
+  // Update local title when prop changes
+  useEffect(() => {
+    setTitle(initialTitle);
+  }, [initialTitle]);
+
   const startEditing = () => setIsEditing(true);
   const cancelEditing = () => {
     setIsEditing(false);
     setDraftTitle(title);
   };
-  const saveTitle = () => {
+  
+  const saveTitle = async () => {
     const trimmed = draftTitle.trim();
-    if (trimmed.length > 0) setTitle(trimmed);
-    toast.success('Task updated successfully!');
-    setIsEditing(false);
+    if (trimmed.length === 0) {
+      toast.error('Task title cannot be empty');
+      return;
+    }
+    
+    if (trimmed === title) {
+      // No changes, just exit edit mode
+      setIsEditing(false);
+      return;
+    }
+
+    try {
+      setIsUpdating(true);
+      const updatedTask = await updateTask(id.toString(), { title: trimmed });
+      setTitle(trimmed);
+      setIsEditing(false);
+      toast.success('Task updated successfully!');
+      
+      // Trigger refresh if callback provided
+      // if (onUpdate) {
+      //   onUpdate();
+      // }
+      // No need to trigger refresh as the updates task is visible right then and there
+    } catch (error) {
+      console.error('Error updating task:', error);
+      toast.error('Failed to update task. Please try again.');
+      setDraftTitle(title); // Revert draft on error
+    } finally {
+      setIsUpdating(false);
+    }
   };
 
   const onKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (e) => {
@@ -76,6 +113,7 @@ const Task: React.FC<TaskProps> = ({
               value={draftTitle}
               onChange={(e) => setDraftTitle(e.target.value)}
               onKeyDown={onKeyDown}
+              disabled={isUpdating}
               className="w-[95%]"
             />
           ) : (
@@ -101,14 +139,20 @@ const Task: React.FC<TaskProps> = ({
           </ConfettiButton>
           {isEditing ? (
             <div className="ml-2 flex items-center gap-2">
-              <Button size={'xs'} onClick={saveTitle} className="px-3">
-                Save
+              <Button 
+                size={'xs'} 
+                onClick={saveTitle} 
+                className="px-3"
+                disabled={isUpdating}
+              >
+                {isUpdating ? 'Saving...' : 'Save'}
               </Button>
               <Button
                 variant={'destructive'}
                 size={'xs'}
                 onClick={cancelEditing}
                 className="px-2"
+                disabled={isUpdating}
               >
                 Cancel
               </Button>

@@ -29,8 +29,8 @@ export const createTask = async (req: AuthRequest, res: Response) => {
 };
 
 export const updateTask = async (req: AuthRequest, res: Response) => {
-  await service.updateTask(req.params.id as string, req.userId!, req.body);
-  res.sendStatus(204);
+  const updatedTask = await service.updateTask(req.userId!, req.params.id as string, req.body.title);
+  res.json(updatedTask);
 };
 
 export const deleteTask = async (req: AuthRequest, res: Response) => {
