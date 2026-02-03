@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: 'Permissions-Policy',
-            value: 'browsing-topics=()', // Disable browsing-topics feature
+            value: '', // Disable browsing-topics feature
           },
         ],
       },
