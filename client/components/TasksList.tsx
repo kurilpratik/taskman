@@ -15,15 +15,16 @@ import {
   PaginationPrevious,
 } from '@/components/ui/pagination';
 
-
 const TasksList = ({
   refreshKey,
   status,
   onRefresh,
+  search,                          // <-- NEW
 }: {
   refreshKey: number;
   status?: 'completed' | 'pending';
   onRefresh: () => void;
+  search?: string;                  // <-- NEW
 }) => {
   const [tasks, setTasks] = useState<TaskType[]>([]);
   const [loading, setLoading] = useState(true);
@@ -32,7 +33,7 @@ const TasksList = ({
     const loadTasks = async () => {
       try {
         setLoading(true);
-        const res = await fetchTasks({ page: 1, limit: 10, status });
+        const res = await fetchTasks({ page: 1, limit: 10, status, search }); // <-- include search
         const body: any = res;
         const items: TaskType[] = body.data;
         setTasks(items);
@@ -44,45 +45,44 @@ const TasksList = ({
       }
     };
     loadTasks();
-  }, [refreshKey, status]);
+  }, [refreshKey, status, search]);   // <-- include search
 
   const handleToggle = async (id: string) => {
     await toggleTask(id);
     console.log('Task toggled', id);
-    // setTasks(prev =>
-    //   prev.map(t =>
-    //     t.id === id ? { ...t, completed: !t.completed } : t
-    //   )
-    // );
-    // Trigger refresh to reload all task lists
     if (onRefresh) {
       onRefresh();
     }
   };
 
-const handleDelete = async (id: string) => {
-  await deleteTask(id);
-  setTasks(prev => prev.filter(t => t.id !== id));
-};
+  const handleDelete = async (id: string) => {
+    await deleteTask(id);
+    setTasks((prev) => prev.filter((t) => t.id !== id));
+  };
 
-const handleUpdate = async () => {
-    // Trigger refresh to reload all task lists
+  const handleUpdate = async () => {
     if (onRefresh) {
       onRefresh();
     }
   };
 
-  if (loading) return <p className="text-center text-sm text-gray-500 pt-24">Loading tasks...</p>;
+  if (loading)
+    return (
+      <p className="text-center text-sm text-gray-500 pt-24">
+        Loading tasks...
+      </p>
+    );
 
   if (!loading && tasks.length === 0) {
     return <p>No tasks found.</p>;
   }
+
   return (
     <div>
       {tasks?.map((task) => (
         <Task
-          id={task.id} // Needed for the TaskProps
-          key={task.id} // Needed for React list rendering
+          id={task.id}
+          key={task.id}
           title={task.title}
           completed={task.completed}
           createdAt={task.createdAt}

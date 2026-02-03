@@ -10,10 +10,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 const Dashboard = () => {
   const [refreshKey, setRefreshKey] = useState(0);
   const [statusFilter, setStatusFilter] = useState<'all' | 'completed' | 'pending'>('pending');
+const [searchTerm, setSearchTerm] = useState('');   
+  const [appliedSearch, setAppliedSearch] = useState('');
 
   const getStatusParam = (): 'completed' | 'pending' | undefined => {
     if (statusFilter === 'all') return undefined;
     return statusFilter;
+  };
+
+  const handleSearch = () => {
+    setAppliedSearch(searchTerm);                // apply current text
+    setRefreshKey((prev) => prev + 1);          // force reload of tasks
   };
 
   return (
@@ -30,27 +37,34 @@ const Dashboard = () => {
             <TabsTrigger value="completed">Completed</TabsTrigger>
             <TabsTrigger value="all">All</TabsTrigger>
           </TabsList>
-          <Search />
+          <Search
+            value={searchTerm}
+            onChange={setSearchTerm}
+            onSearch={handleSearch}
+          />
         </div>
-        <TabsContent value="pending">
-          <TasksList 
-            refreshKey={refreshKey} 
-            status={getStatusParam()} 
+       <TabsContent value="pending">
+          <TasksList
+            refreshKey={refreshKey}
+            status={getStatusParam()}
             onRefresh={() => setRefreshKey((prev) => prev + 1)}
+            search={appliedSearch}     // <-- pass search
           />
         </TabsContent>
         <TabsContent value="completed">
-          <TasksList 
-            refreshKey={refreshKey} 
-            status={getStatusParam()} 
+          <TasksList
+            refreshKey={refreshKey}
+            status={getStatusParam()}
             onRefresh={() => setRefreshKey((prev) => prev + 1)}
+            search={appliedSearch}
           />
         </TabsContent>
         <TabsContent value="all">
-          <TasksList 
-            refreshKey={refreshKey} 
-            status={getStatusParam()} 
+          <TasksList
+            refreshKey={refreshKey}
+            status={getStatusParam()}
             onRefresh={() => setRefreshKey((prev) => prev + 1)}
+            search={appliedSearch}
           />
         </TabsContent>
 
