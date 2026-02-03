@@ -25,8 +25,8 @@ const CreateTask = ({ onCreate }: { onCreate: () => void }) => {
   };
 
   return (
-    <div className="sticky top-4 z-10 mx-auto my-3 mb-5 w-xl">
-      <form className="flex gap-2" onSubmit={handleSubmit}>
+    <div className="sticky top-4 z-10 mx-auto my-0 sm:my-3 mb-5 w-full max-w-xl px-1 sm:px-6 lg:px-0">
+      <form className="flex flex-col gap-2 sm:flex-row" onSubmit={handleSubmit}>
         <Input
           id="task"
           name="task"
@@ -37,7 +37,7 @@ const CreateTask = ({ onCreate }: { onCreate: () => void }) => {
           required
           className="rounded-full border-blue-300 bg-white"
         />
-        <Button type="submit" className="gap-0.5 rounded-full">
+        <Button type="submit" className="w-full gap-0.5 rounded-full sm:w-auto">
           <PlusIcon />
           Create Task
         </Button>

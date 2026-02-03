@@ -28,10 +28,10 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
     }
   };
   return (
-    <header className="top-1 z-100 mx-auto w-xl px-0 py-4">
+    <header className="top-1 z-100 mx-auto w-full max-w-4xl px-4 py-4 sm:px-6 lg:px-8">
       <nav>
         {/* Glassy rounded container */}
-        <div className="flex items-center justify-between gap-6 rounded-full border border-white/10 bg-white px-5 py-2 shadow-md backdrop-blur-md">
+        <div className="flex items-stretch justify-between gap-3 rounded-full border border-white/10 bg-white px-4 py-2 shadow-md backdrop-blur-md sm:flex-row sm:items-center sm:gap-6 sm:px-5">
           {/* Left: Logo */}
           <div className="flex items-center gap-3">
             <Link href="/" className="text-neutral font-semibold">

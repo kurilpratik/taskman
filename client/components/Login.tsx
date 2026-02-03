@@ -61,12 +61,13 @@ const Login = () => {
     } catch (error) {
       setLoading(false);
       setErrors({ email: 'Invalid email or password' });
+      alert("Unable to login at the moment");
     }
   };
 
   return (
     <div>
-      <Card className="w-90">
+      <Card className="w-full max-w-md">
         <form onSubmit={handleSubmit}>
           <CardContent>
             <div className="flex flex-col gap-4">

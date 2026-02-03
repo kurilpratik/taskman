@@ -104,9 +104,9 @@ const Task: React.FC<TaskProps> = ({
   };
 
   return (
-    <div className="mx-auto w-xl" key={id}>
-      <Card className="my-4 flex-row items-center justify-between gap-0 border-0 p-4 shadow-[0_8px_24px_rgba(149,157,165,0.2)]">
-        <div className="flex-1">
+    <div className="mx-auto w-full max-w-xl px-1 sm:px-6 lg:px-0" key={id}>
+      <Card className="my-3 flex flex-row items-start justify-between gap-3 border-0 p-4 shadow-[0_8px_24px_rgba(149,157,165,0.2)] sm:my-4 sm:flex-row sm:items-center sm:gap-0">
+        <div className="flex-1 min-w-0">
           {isEditing ? (
             <input
               ref={inputRef}
@@ -114,11 +114,11 @@ const Task: React.FC<TaskProps> = ({
               onChange={(e) => setDraftTitle(e.target.value)}
               onKeyDown={onKeyDown}
               disabled={isUpdating}
-              className="w-[95%]"
+              className="w-full max-w-full"
             />
           ) : (
             <h2
-              className={`block font-semibold ${completed ? 'text-neutral-400 line-through' : ''}`}
+              className={`block wrap-break-word-words text-base font-semibold sm:text-lg ${completed ? 'text-neutral-400 line-through' : ''}`}
             >
               {title}
             </h2>
@@ -129,7 +129,7 @@ const Task: React.FC<TaskProps> = ({
             {formatDate(createdAt)}
           </p>
         </div>
-        <div className="flex items-center">
+        <div className="flex items-center gap-0 self-stretch justify-between sm:self-auto sm:justify-end">
           <ConfettiButton className="m-0 h-6 w-5 bg-white p-0 hover:bg-white">
             <Checkbox
               checked={completed}
@@ -138,7 +138,7 @@ const Task: React.FC<TaskProps> = ({
             />
           </ConfettiButton>
           {isEditing ? (
-            <div className="ml-2 flex items-center gap-2">
+            <div className="ml-2 flex items-center gap-1 sm:gap-2">
               <Button 
                 size={'xs'} 
                 onClick={saveTitle} 
@@ -162,7 +162,7 @@ const Task: React.FC<TaskProps> = ({
               <Button
                 variant={'secondary'}
                 size={'icon-xs'}
-                className="ml-2"
+                className="ml-1.5 sm:ml-2"
                 onClick={startEditing}
               >
                 <Edit2Icon className="text-blue-800" />
@@ -170,7 +170,7 @@ const Task: React.FC<TaskProps> = ({
               <Button
                 variant={'secondary'}
                 size={'icon-xs'}
-                className="ml-2"
+                className="ml-1.5 sm:ml-2"
                 onClick={onDelete}
               >
                 <Trash2 className="text-red-800" />

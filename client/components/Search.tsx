@@ -21,13 +21,13 @@ const Search: React.FC<SearchProps> = ({ value, onChange, onSearch }) => {
   };
 
   return (
-    <div className="flex-1">
+    <div className="mt-2 w-full flex-1 sm:mt-0 sm:w-auto">
       <Field>
-        <ButtonGroup>
+        <ButtonGroup className="w-full sm:w-auto">
           <Input
             id="input-button-group"
             placeholder="Type to search..."
-            className="rounded-full bg-white/50"
+            className="w-full rounded-full bg-white/50"
             value={value}
             onChange={(e) => onChange(e.target.value)}
             onKeyDown={handleKeyDown}
