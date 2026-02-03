@@ -27,7 +27,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
-app.get('/api/health', (_, res) => {
+app.get('/api/health', (_: Request, res: Response) => {
   res.json({ status: 'OK' });
 });
 

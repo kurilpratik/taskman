@@ -1,13 +1,20 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "Node16",
-    "moduleResolution": "Node16",
+    "module": "CommonJS",
     "outDir": "server/dist",
-    // "rootDir": "/",
+    "rootDir": ".",
+
     "strict": true,
     "esModuleInterop": true,
-    "skipLibCheck": true
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+
+     "types": ["node"],
+    "typeRoots": ["./node_modules/@types"],
+
+    "resolveJsonModule": true
   },
+  "include": ["**/*.ts"],
   "exclude": ["node_modules", "client"]
 }
