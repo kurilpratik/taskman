@@ -9,13 +9,17 @@ export function proxy(req: NextRequest) {
   // /login.
   const token = req.cookies.get('refreshToken')?.value;
 
-  if (!token) {
-    return NextResponse.redirect(new URL('/login', req.url));
-  }
-
   // If user is logged in and tries to access login/register, redirect to dashboard
   if (token && (pathname === '/login' || pathname === '/register')) {
     return NextResponse.redirect(new URL('/dashboard', req.url));
+  }
+
+  // Protect dashboard routes - redirect to login if no token
+  // Only check this for dashboard routes, not for login/register
+  if (pathname.startsWith('/dashboard')) {
+    if (!token) {
+      return NextResponse.redirect(new URL('/login', req.url));
+    }
   }
 
   return NextResponse.next();
