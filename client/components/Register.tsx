@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
@@ -33,6 +34,7 @@ const Register = () => {
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
+  const [serverError, setServerError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,21 +67,32 @@ const Register = () => {
     }
 
     setErrors({});
+    setServerError(null);
     setLoading(true);
 
     try {
-      if (register) {
-        await register(data.email, data.password, data.fullName);
+      if (!register) {
+        setServerError('Registration is not available right now. Please try again.');
+        return;
       }
-      router.push('/dashboard');
+
+      await register(data.email, data.password, data.fullName);
+
       setData({
         fullName: '',
         email: '',
         password: '',
         confirmPassword: '',
       });
+      router.push('/dashboard');
     } catch (error) {
-      alert('Registration failed');
+      if (axios.isAxiosError(error) && error.response?.data?.message) {
+        setServerError(error.response.data.message);
+      } else {
+        setServerError('Registration failed. Please try again.');
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -89,6 +102,11 @@ const Register = () => {
         onSubmit={handleSubmit}
         className="mt-6 w-full max-w-md space-y-3.5"
       >
+        {serverError && (
+          <p className="text-sm text-red-600" role="alert">
+            {serverError}
+          </p>
+        )}
         <Field>
           <FieldLabel>
             <Label>Full name</Label>

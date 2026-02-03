@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import axios from 'axios';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
@@ -58,10 +59,13 @@ const Login = () => {
         setLoading(false);
         return;
       }
-    } catch (error) {
+    } catch (error: any) {
       setLoading(false);
-      setErrors({ email: 'Invalid email or password' });
-      alert("Unable to login at the moment");
+      if (axios.isAxiosError(error) && error.response?.data?.message) {
+      alert(error.response.data.message);
+    } else {
+      alert('Something went wrong. Please try again.');
+    }
     }
   };
 
