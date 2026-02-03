@@ -1,4 +1,4 @@
-import express from 'express';
+import express, {Request, NextFunction, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
@@ -22,7 +22,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Simple logging middleware
-app.use((req, res, next) => {
+app.use((req: Request, res: Response, next: NextFunction) => {
   console.log(`${req.method} ${req.url}`);
   next();
 });
