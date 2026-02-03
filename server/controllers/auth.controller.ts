@@ -8,14 +8,25 @@ import * as service from '../services/auth.service';
 //   send the cookie (browser requires Secure with SameSite=None). For local
 //   development (http://localhost) set 'lax' so the cookie will be accepted
 //   by the browser while still providing reasonable CSRF protection.
-const cookieOptions = {
-  httpOnly: true,
-  secure: process.env.NODE_ENV === 'production',
-  sameSite:
-    process.env.NODE_ENV === 'production'
-      ? ('none' as const)
-      : ('lax' as const),
+const getCookieOptions = () => {
+  const baseOptions = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite:
+      process.env.NODE_ENV === 'production'
+        ? ('none' as const)
+        : ('lax' as const),
+    path: '/',
+  };
+
+  // Only set domain in production if COOKIE_DOMAIN is specified
+  if (process.env.NODE_ENV === 'production' && process.env.COOKIE_DOMAIN) {
+    return { ...baseOptions, domain: process.env.COOKIE_DOMAIN };
+  }
+
+  return baseOptions;
 };
+
 export const register = async (req: Request, res: Response) => {
   try {
     const { accessToken, refreshToken } = await service.register(
@@ -23,7 +34,7 @@ export const register = async (req: Request, res: Response) => {
       req.body.password,
       req.body.fullName
     );
-    res.cookie('refreshToken', refreshToken, cookieOptions);
+    res.cookie('refreshToken', refreshToken, getCookieOptions());
     return res.status(201).json({
       accessToken,
       message: 'Your account has been created successfully.',
@@ -43,7 +54,7 @@ export const login = async (req: Request, res: Response) => {
       req.body.email,
       req.body.password
     );
-    res.cookie('refreshToken', refreshToken, cookieOptions);
+    res.cookie('refreshToken', refreshToken, getCookieOptions());
     return res.status(200).json({
       accessToken,
       message: 'You have logged in successfully.',
@@ -112,7 +123,7 @@ export const logout = async (req: Request, res: Response) => {
       await service.logout(token);
     }
 
-    res.clearCookie('refreshToken');
+    res.clearCookie('refreshToken', getCookieOptions());
     return res
       .status(200)
       .json({ message: 'You have been logged out successfully.' });
