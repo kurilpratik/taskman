@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Card } from './ui/card';
 import { Checkbox } from './ui/checkbox';
 import { Button } from './ui/button';
-import { Delete, DeleteIcon, Edit2Icon, Trash2 } from 'lucide-react';
+import { Edit2Icon, Trash2 } from 'lucide-react';
 import { ConfettiButton } from './ui/confetti';
 import { toast } from 'sonner';
 
@@ -13,6 +13,8 @@ type TaskProps = {
   title: string;
   completed: boolean;
   createdAt: string;
+  onToggle: () => void;
+  onDelete: () => void;
 };
 
 const Task: React.FC<TaskProps> = ({
@@ -20,12 +22,15 @@ const Task: React.FC<TaskProps> = ({
   title: initialTitle,
   completed,
   createdAt,
+  onToggle,
+  onDelete,
 }) => {
-  const [checked, setChecked] = useState<boolean>(completed ?? false);
   const [title, setTitle] = useState<string>(initialTitle ?? 'Task Title');
   const [isEditing, setIsEditing] = useState(false);
   const [draftTitle, setDraftTitle] = useState(title);
   const inputRef = useRef<HTMLInputElement | null>(null);
+
+
   useEffect(() => {
     if (isEditing) {
       setDraftTitle(title);
@@ -73,13 +78,13 @@ const Task: React.FC<TaskProps> = ({
             />
           ) : (
             <h2
-              className={`block font-semibold ${checked ? 'text-neutral-400 line-through' : ''}`}
+              className={`block font-semibold ${completed ? 'text-neutral-400 line-through' : ''}`}
             >
               {title}
             </h2>
           )}
           <p
-            className={`block text-xs ${checked ? 'text-neutral-300' : 'text-neutral-600'}`}
+            className={`block text-xs ${completed ? 'text-neutral-300' : 'text-neutral-600'}`}
           >
             {createdAt}
           </p>
@@ -87,8 +92,8 @@ const Task: React.FC<TaskProps> = ({
         <div className="flex items-center">
           <ConfettiButton className="m-0 h-6 w-5 bg-white p-0 hover:bg-white">
             <Checkbox
-              checked={checked}
-              onCheckedChange={(checked) => setChecked(checked === true)}
+              checked={completed}
+              onCheckedChange={() => onToggle()}
               className="h-6 w-6 border-blue-200"
             />
           </ConfettiButton>
@@ -120,9 +125,7 @@ const Task: React.FC<TaskProps> = ({
                 variant={'secondary'}
                 size={'icon-xs'}
                 className="ml-2"
-                onClick={() => {
-                  toast.error('Task deleted');
-                }}
+                onClick={onDelete}
               >
                 <Trash2 className="text-red-800" />
               </Button>

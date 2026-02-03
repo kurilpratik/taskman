@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Task from './Task';
 
-import { fetchTasks, TaskType } from '@/lib/tasks';
+import { fetchTasks, TaskType, toggleTask, deleteTask } from '@/lib/tasks';
 
 import {
   Pagination,
@@ -42,6 +42,21 @@ const TasksList = ({
     loadTasks();
   }, [refreshKey]);
 
+  const handleToggle = async (id: string) => {
+    await toggleTask(id);
+    console.log('Task toggled', id);
+    setTasks(prev =>
+      prev.map(t =>
+        t.id === id ? { ...t, completed: !t.completed } : t
+      )
+    );
+  };
+
+const handleDelete = async (id: string) => {
+  await deleteTask(id);
+  setTasks(prev => prev.filter(t => t.id !== id));
+};
+
   if (loading) return <p className="text-center text-sm text-gray-500 pt-24">Loading tasks...</p>;
 
   if (!loading && tasks.length === 0) {
@@ -56,6 +71,8 @@ const TasksList = ({
           title={task.title}
           completed={task.completed}
           createdAt={task.createdAt}
+          onToggle={() => handleToggle(task.id)}
+          onDelete={() => handleDelete(task.id)}
         />
       ))}
       <Pagination className="pb-4">
