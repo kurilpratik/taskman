@@ -7,6 +7,8 @@ import { Button } from './ui/button';
 import { Edit2Icon, Trash2 } from 'lucide-react';
 import { ConfettiButton } from './ui/confetti';
 import { toast } from 'sonner';
+import { formatDate } from '@/lib/helper';
+
 
 type TaskProps = {
   id: string | number;
@@ -86,7 +88,7 @@ const Task: React.FC<TaskProps> = ({
           <p
             className={`block text-xs ${completed ? 'text-neutral-300' : 'text-neutral-600'}`}
           >
-            {createdAt}
+            {formatDate(createdAt)}
           </p>
         </div>
         <div className="flex items-center">
