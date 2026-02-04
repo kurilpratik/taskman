@@ -8,6 +8,7 @@ export function proxy(req: NextRequest) {
   // never stored as a cookie and caused an unconditional redirect back to
   // /login.
   const token = req.cookies.get('refreshToken')?.value;
+  console.log(token)
 
   // If user is logged in and tries to access login/register, redirect to dashboard
   if (token && (pathname === '/login' || pathname === '/register')) {
