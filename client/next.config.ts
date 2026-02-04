@@ -1,7 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   async headers() {
     return [
       {
@@ -9,7 +8,7 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: 'Permissions-Policy',
-            value: '', // Disable browsing-topics feature
+            value: 'camera=(), microphone=(), geolocation=()',
           },
         ],
       },
