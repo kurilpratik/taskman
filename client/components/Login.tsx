@@ -115,7 +115,7 @@ const Login = () => {
               className="w-full rounded-full"
               disabled={loading}
             >
-              Login
+              {loading? 'Loading' : 'Login'}
             </Button>
             <Link href="/register" className="w-full">
               <Button variant="outline" className="w-full rounded-full">
