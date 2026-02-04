@@ -84,8 +84,7 @@ const Register = () => {
         password: '',
         confirmPassword: '',
       });
-      // router.push('/dashboard');
-      window.location.href = '/dashboard';
+      router.push('/dashboard');
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.data?.message) {
         setServerError(error.response.data.message);
