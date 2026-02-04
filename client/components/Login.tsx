@@ -52,7 +52,8 @@ const Login = () => {
         await login(data.email, data.password);
         setData({ email: '', password: '' });
         setLoading(false);
-        router.push('/dashboard');
+        // router.push('/dashboard');
+        window.location.href = '/dashboard';
         console.log('Login successful');
       } else {
         setErrors({ email: 'Login function is not available' });
