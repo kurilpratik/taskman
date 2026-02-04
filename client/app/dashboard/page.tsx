@@ -4,6 +4,7 @@ import { useState } from 'react';
 import CreateTask from '@/components/CreateTask';
 import Search from '@/components/Search';
 import TasksList from '@/components/TasksList';
+import ProtectedRoute from '@/components/ProtectedRoute';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
@@ -24,6 +25,7 @@ const Dashboard = () => {
   };
 
   return (
+    <ProtectedRoute>
     <div className="px-4 pb-6 pt-0 sm:pt-2 sm:px-6 lg:px-0">
       <CreateTask onCreate={() => setRefreshKey((prev) => prev + 1)} />
       <Tabs 
@@ -70,6 +72,7 @@ const Dashboard = () => {
 
       </Tabs>
     </div>
+    </ProtectedRoute>
   );
 };
 

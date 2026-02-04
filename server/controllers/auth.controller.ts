@@ -19,11 +19,6 @@ const getCookieOptions = () => {
     path: '/',
   };
 
-  // Only set domain in production if COOKIE_DOMAIN is specified
-  if (process.env.NODE_ENV === 'production' && process.env.COOKIE_DOMAIN) {
-    return { ...baseOptions, domain: process.env.COOKIE_DOMAIN };
-  }
-
   return baseOptions;
 };
 
